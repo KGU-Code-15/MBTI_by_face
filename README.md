@@ -14,3 +14,10 @@ IOS앱 : 한민
 React웹앱 : 상준
 
 모델 : 상민
+
+## react-use-faceapi 오류시
+
+```
+npm 버전이 7 이상일 경우 충돌
+npm -g install npm@6.14.11
+```
