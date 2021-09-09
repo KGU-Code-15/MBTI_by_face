@@ -19,6 +19,7 @@ function start() {
     container.append(image);
 
     // canvas를 초기화 한다
+    // createCanvaseFromMedia는 htmlcanvaselement를 return
     const canvas = faceapi.createCanvasFromMedia(image);
     container.append(canvas);
     const displaySize = { width: image.width, height: image.height };
@@ -34,7 +35,7 @@ function start() {
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
     resizedDetections.forEach((detection) => {
       const box = detection.detection.box;
-      const drawBox = new faceapi.draw.DrawBox(box, { label: 'Face' });
+      const drawBox = new faceapi.draw.DrawBox(box, { label: '' });
       drawBox.draw(canvas);
     });
   });
