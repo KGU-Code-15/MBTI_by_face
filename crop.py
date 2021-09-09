@@ -1,27 +1,28 @@
 import cv2
+import glob
+import os
 
-face_cascade = cv2.CascadeClassifier(
-    './haarcascades/haarcascade_frontalface.xml')
-eye_casecade = cv2.CascadeClassifier('./haarcascades/haarcascade_eye.xml')
+input_dir = "input"
+output_dir = "output"
+files = os.listdir(input_dir)
+print(files)
+face_cascade = cv2.CascadeClassifier('./haarcascade_frontalface.xml')
 
-img = cv2.imread('friends.jpg')
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-imgNum = 0
-for (x, y, w, h) in faces:
-    cropped = img[y - int(h / 4):y + h + int(h / 4), x -
-                  int(w / 4):x + w + int(w / 4)]
-    # 이미지를 저장
-    cv2.imwrite("thumbnail" + str(imgNum) + ".png", cropped)
-    imgNum += 1
+for el in files:
+    splt = el.split(".")  # 파일 이름
+    ext = splt.pop()  # 파일 확장자
+    if ext in "jpg jpeg png bmp JPG JPEG PNG BMP":
 
-    #cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0),2)
-    # roi_gray = gray[y:y+h, x:x+w]
-    # roi_color = img[y:y+h, x:x+w]
-    # eyes = eye_casecade.detectMultiScale(roi_gray)
-    # for (ex, ey, ew, eh) in eyes:
-    #     cv2.rectangle(roi_color, (ex,ey), (ex+ew, ey+eh),(0,255,0),2)
+        img_files = input_dir+'/' + el
+        img = cv2.imread(img_files)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-cv2.imshow('Image view', img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+        for (x, y, w, h) in faces:
+            cropped = img[y - int(h / 4):y + h + int(h / 4),
+                          x - int(w / 4):x + w + int(w / 4)]
+            if cropped.size == 0:
+                print(el+' 파일 출력실패')
+                break
+            # 이미지를 저장
+            cv2.imwrite(output_dir+'/'+el, cropped)
