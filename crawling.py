@@ -7,11 +7,18 @@ import time
 import urllib.request
 
 
-# 여기에 크롬드라이브 다운로드 받은 경로를 입력한다.
-driver = webdriver.Chrome('')
+chrome_options = webdriver.ChromeOptions()
+
+chrome_options.add_argument('--headless')  # 내부 창을 띄울 수 없으므로 설정
+
+chrome_options.add_argument('--no-sandbox')
+
+chrome_options.add_argument('--disable-dev-shm-usage')
+
+driver = webdriver.Chrome('chromedriver', chrome_options=chrome_options)
 driver.get("https://www.google.co.kr/imghp?hl=ko&ogbl")
 elem = driver.find_element_by_name("q")
-elem.send_keys("flying birds")
+elem.send_keys('유재석')
 elem.send_keys(Keys.RETURN)
 
 SCROLL_PAUSE_TIME = 1
@@ -37,8 +44,8 @@ for image in images:
     try:
         image.click()
         time.sleep(2)
-        imgUrl = driver.find_element_by_xpath(
-            '/html/body/div[2]/c-wiz/div[3]/div[2]/div[3]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div/div[2]/a/img').get_attribute("src")
+        imgUrl = driver.find_element_by_css_selector(
+            '.n3VNCb').get_attribute("src")
         urllib.request.urlretrieve(imgUrl, str(count) + ".jpg")
         count = count + 1
     except:
